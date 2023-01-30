@@ -1,3 +1,6 @@
+import csv
+import math
+
 # Hash Map Class
 
 class HashTable:
@@ -50,4 +53,45 @@ class HashTable:
         for k in bucket_list:
             if k[0] == key:
                 bucket_list.remove([k[0], k[1]])
+
+
+# Package class
+class Package:
+
+    # Constructor for package class
+    def __init__(self, package_id, address, city, state, zip_code, deadline, weight, notes):
+        self.package_id = package_id
+        self.address = address
+        self.city = city
+        self.state = state
+        self.zip_code = zip_code
+        self.deadline = deadline
+        self.weight = weight
+        self.notes = notes
+
+    def __str__(self):
+        return "%s, %s, %s, %s, %s, %s, %s, %s" % (self.package_id, self.address, self.city,
+                                                   self.state, self.zip_code, self.deadline,
+                                                   self.weight, self.notes)
+def loadPackageData(fileName):
+    with open(fileName) as packages:
+        package_data = csv.reader(packages, delimiter=',')
+        for package in packages:
+            pID = package[0]
+            paddress = package[1]
+            pcity = package[2]
+            pstate = package[3]
+            pzip = package[4]
+            pdeadline = package[5]
+            pweight = package[6]
+            pnote = package[7]
+
+            #p = Package(pID, paddress, pcity, pstate, pzip, pdeadline, pweight, pnote)
+            #print(p)
+
+
+
+
+
+
 
