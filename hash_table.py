@@ -1,6 +1,7 @@
 import csv
 import math
 
+
 # Hash Map Class
 
 class HashTable:
@@ -16,7 +17,7 @@ class HashTable:
     # function for inserting new item into the hash table
     def insert(self, key, item):
         # hash functions to determine which bucket the item will be placed in
-        bucket = hash(item) % len(self.table)
+        bucket = hash(key) % len(self.table)
         bucket_list = self.table[bucket]
 
         # updates the key if it already exists in the table
@@ -35,12 +36,11 @@ class HashTable:
         # finds the bucket list where the key would be
         bucket = hash(key) % len(self.table)
         bucket_list = self.table[bucket]
-
         # searches for the key in the identified bucket
         for k in bucket_list:
             if k[0] == key:
                 return k[1]
-            return None
+        return None
 
     # function for deleting items from the hash table using the key
 
@@ -73,11 +73,13 @@ class Package:
         return "%s, %s, %s, %s, %s, %s, %s, %s" % (self.package_id, self.address, self.city,
                                                    self.state, self.zip_code, self.deadline,
                                                    self.weight, self.notes)
+
+
 def loadPackageData(fileName):
     with open(fileName) as packages:
         package_data = csv.reader(packages, delimiter=',')
-        for package in packages:
-            pID = package[0]
+        for package in package_data:
+            pID = int(package[0])
             paddress = package[1]
             pcity = package[2]
             pstate = package[3]
@@ -85,13 +87,13 @@ def loadPackageData(fileName):
             pdeadline = package[5]
             pweight = package[6]
             pnote = package[7]
-
-            #p = Package(pID, paddress, pcity, pstate, pzip, pdeadline, pweight, pnote)
-            #print(p)
-
-
+            # print(pID)
+            p = Package(pID, paddress, pcity, pstate, pzip, pdeadline, pweight, pnote)
+            myHash.insert(pID, p)
 
 
-
+myHash = HashTable()
+print(myHash.table)
+loadPackageData('PackageFile.csv')
 
 
