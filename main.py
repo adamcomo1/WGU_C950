@@ -1,3 +1,6 @@
+# Adam Comoletti
+# Student ID: 009959429
+
 import csv
 import math
 from datetime import timedelta
