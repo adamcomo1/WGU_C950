@@ -17,6 +17,6 @@ class Package:
         self.delivery_time = timedelta()
 
     def __str__(self):
-        return "%s, %s, %s, %s, %s, %s, %s, %s" % (self.package_id, self.address, self.city,
+        return "%s, %s, %s, %s, %s, %s, %s, %s, %s, Truck %s" % (self.package_id, self.address, self.city,
                                                    self.state, self.zip_code, self.deadline,
-                                                   self.weight, self.notes)
+                                                   self.weight, self.notes, self.status, self.truck_number)

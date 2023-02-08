@@ -4,6 +4,8 @@ from datetime import timedelta
 from truck import packages, truck2, truck3
 from truck import truck1
 
+package_status_list = []
+
 
 def load_distance_data(filename):
     distance_array = []
@@ -15,7 +17,6 @@ def load_distance_data(filename):
 
 
 def deliver_package(truck):
-
     for i in truck.packages_loaded:
         current_package = packages.search(i)
         distance_traveled = 0.0
@@ -26,13 +27,18 @@ def deliver_package(truck):
         truck.mileage += distance_traveled
         truck.address = current_package.address
         # print(truck.address)
-        current_package.status = 'Delivered'
+        # current_package.status = 'Delivered'
         truck.current_time += timedelta(hours=distance_traveled / 18)
         current_package.delivery_time = truck.current_time
+        current_package.departure_time = truck.departure_time
+        current_package.truck_number = truck.number
+        # print(current_package.package_id, current_package.delivery_time)
+        # package_status_list.append([current_package, current_package.status, current_package.delivery_time])
     distance_traveled = get_distance(truck.address, "4001 South 700 East")
     truck.mileage += distance_traveled
     truck.current_time += timedelta(hours=distance_traveled / 18)
-    print(truck.current_time)
+    # print(truck.current_time)
+
 
 def load_address_data(filename):
     address_dict = {}
@@ -80,7 +86,7 @@ def routing_algorithm(truck):
 # print('truck 1\n')
 # print(truck1.packages_loaded)
 routing_algorithm(truck1)
-print(truck1.packages_loaded)
+# print(truck1.packages_loaded)
 
 # print('\ntruck 2')
 # print(truck2.packages_loaded)
@@ -94,4 +100,20 @@ routing_algorithm(truck3)
 deliver_package(truck1)
 deliver_package(truck2)
 deliver_package(truck3)
-print(truck1.mileage + truck2.mileage + truck3.mileage)
+# print(truck1.mileage + truck2.mileage + truck3.mileage)
+t = input('Choice')
+if t == 'a':
+    package_ids = [int(input('Enter a package ID'))]
+if t == 'b':
+    package_ids = range(1, 41)
+time_input = input('Enter time (Format HH:MM').split(':')
+input_time = timedelta(hours=int(time_input[0]), minutes=int(time_input[1]))
+for i in package_ids:
+    package = packages.search(i)
+    if input_time < package.departure_time:
+        package.status = "At the Hub"
+    elif input_time < package.delivery_time:
+        package.status = "En route"
+    else:
+        package.status = "Delivered %s" % package.delivery_time
+    print(package)
