@@ -21,6 +21,8 @@ class HashTable:
             self.table.append([])
 
     # function for inserting new item into the hash table
+    # takes a key and hashes it. Uses that hash to place it into a buck.
+    # Time Complexity: O(n)
     def insert(self, key, item):
         # hash functions to determine which bucket the item will be placed in
         bucket = hash(key) % len(self.table)
@@ -38,6 +40,7 @@ class HashTable:
 
     # Function for searching for an item using the key in the hash table
     # Return the item if found. If not found, returns none.
+    # Time Complexity: O(n)
     def search(self, key):
         # finds the bucket list where the key would be
         bucket = hash(key) % len(self.table)
@@ -49,7 +52,7 @@ class HashTable:
         return None
 
     # function for deleting items from the hash table using the key
-
+    # Time Complexity: O(n)
     def delete(self, key):
         # finds the bucket list where the item will be deleted
         bucket = hash(key) % len(self.table)
@@ -61,6 +64,9 @@ class HashTable:
                 bucket_list.remove([k[0], k[1]])
 
 
+# Function that takes a csv file name and a hash table.
+# Reads in data from csv file and populates hash table with package objects
+# Time Complexity: O(n)
 def loadPackageData(fileName, package_hash):
     with open(fileName) as packages:
         package_data = csv.reader(packages, delimiter=',')
@@ -81,6 +87,7 @@ def loadPackageData(fileName, package_hash):
 # myHash = HashTable()
 # print(myHash.table)
 
+# Package CLass
 class Package:
 
     # Constructor for package class
@@ -96,6 +103,7 @@ class Package:
         self.status = 'At Hub'
         self.delivery_time = timedelta()
 
+    # Overwrites the print method for the package class
     def __str__(self):
         return "%s, %s, %s, %s, %s, %s, %s, %s, %s, Truck %s" % (self.package_id, self.address, self.city,
                                                                  self.state, self.zip_code, self.deadline,
@@ -103,6 +111,7 @@ class Package:
                                                                  self.truck_number)
 
 
+# Truck Class
 class Truck:
     pass
 
@@ -144,7 +153,9 @@ truck3.current_time = truck3.departure_time
 
 package_status_list = []
 
-
+# Function for importing distance data into the distance list
+# Takes a csv file and reads in the data into a 2D array
+# Time Complexity: O(n)
 def load_distance_data(filename):
     distance_array = []
     with open(filename) as distances:
@@ -153,7 +164,11 @@ def load_distance_data(filename):
             distance_array.append(distance)
         return distance_array
 
-
+# Fuction to simulate package deliver for the given truck.
+# Loops through int values in truck.packages_loaded and returns that package
+# from the package hash table, assigning it to current package. Delivers package
+# and track time, updating variables as it goes.
+# Time Complexity: O(n)
 def deliver_package(truck):
     for i in truck.packages_loaded:
         current_package = packages.search(i)
@@ -177,7 +192,10 @@ def deliver_package(truck):
     truck.current_time += timedelta(hours=distance_traveled / 18)
     # print(truck.current_time)
 
-
+# Function for loading in address data to a dictionary.
+# Takes a csv file as input. Loops through the data and inserts it into the dictionary.
+# Uses a counter to assign key values using int values.
+# Time Complexity: O(n)
 def load_address_data(filename):
     address_dict = {}
     with open(filename) as addresses:
@@ -193,7 +211,10 @@ address_dict = load_address_data('AddressTable.csv')
 distance_data = load_distance_data('DistanceTable.csv')
 
 
-# Will make algorithm here
+# Function for getting the distance between two addresses.
+# Takes input of two address key's and assigns index values with the associated dictionary values.
+# If the distance is empty in that searched array, the values are switched. Returns the distance.
+# Time complexity: O(1)
 def get_distance(address, address1):
     index = address_dict[address]
     index1 = address_dict[address1]
@@ -201,7 +222,10 @@ def get_distance(address, address1):
         return float(distance_data[index1][index])
     return float(distance_data[index][index1])
 
-
+# Function used to sort packages in the input truck implementing the nearest neighbor algorithm.
+# Starts at the assigned vertex (HUB) and visits the closest unvisted vertex until all have been visited.
+# Appends the old truck list with the new sorted list.
+# Time Complexity: O(n^2)
 def routing_algorithm(truck):
     old_list = truck.packages_loaded
     new_list = []
@@ -239,6 +263,10 @@ deliver_package(truck1)
 deliver_package(truck2)
 deliver_package(truck3)
 total_truck_mileage = truck1.mileage + truck2.mileage + truck3.mileage
+
+# UI for interacting with the delivery simulator.
+# Runs while the input is not 'q'.
+# Allows user to search package status of all packages or a selected package at a given time.
 print('\nWelcome to the Delivery Simulator!\n'
       'Simulation Complete.\n'
       'Total Miles Driven: ' + str(total_truck_mileage) + ' Miles \n')
